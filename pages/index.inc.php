@@ -13,7 +13,8 @@ $subpages = array(
   array("cats", "Kategorien"),
   array("settings", "Einstellungen"),
   array("payment", "Bezahlmöglichkeiten"),
-  array("status", "Rechnung Status")
+  array("status", "Rechnung Status"),
+  array("setup", "Setup/Module/Template")
 );
 
 rex_title("webkiosk", $subpages);
@@ -36,6 +37,9 @@ switch($subpage) {
   break;
   case 'payment':
     require $basedir.'/payment.inc.php';
+  break;
+  case 'setup':
+    require $basedir.'/setup.inc.php';
   break;
   default:
     require $basedir."/orders.inc.php";

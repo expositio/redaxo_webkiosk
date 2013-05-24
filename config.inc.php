@@ -20,7 +20,8 @@
     array("cats", "Kategorien"),
     array("settings", "Einstellungen"),
     array("payment", "Bezahlmöglichkeiten"),
-    array("status", "Rechnung Status")
+    array("status", "Rechnung Status"),
+    array("setup", "Setup/Module/Template")
   );
 
   //AddOn Berechtigung - für jeden User einstellbar
