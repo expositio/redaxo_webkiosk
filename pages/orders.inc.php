@@ -69,6 +69,16 @@ if($func == '') {
 
   $result = $sql->getArray();
   $result = $result[0];
+
+  $articleInfo = explode("|",$result['articles']);
+  $articles = array();
+  for($i = 0; $i < count($articleInfo); $i+=5 ){
+    $articles[$articleInfo[$i]]['name'] = $articleInfo[$i];
+    $articles[$articleInfo[$i]]['amt'] = $articleInfo[$i+1];
+    $articles[$articleInfo[$i]]['price'] = $articleInfo[$i+2];
+    $articles[$articleInfo[$i]]['articlenr'] = $articleInfo[$i+3];
+    $articles[$articleInfo[$i]]['size'] = $articleInfo[$i+4];
+  }
 ?>
 <style type="text/css">
   .order_detail {
@@ -223,29 +233,52 @@ if($func == '') {
         <div class="clear"></div>
       </div>
       <div class="order_product_box">
-        <div class="order_product_col_1">1</div>
-        <div class="order_product_col_2">CIRCLE 01</div>
-        <div class="order_product_col_3">0004</div>
-        <div class="order_product_col_4">39,00 &euro;</div>
-        <div class="clear"></div>
+      <?php
+      $i = 1;
+      foreach($articles as $article){
 
-        <div class="order_product_col_1">2</div>
-        <div class="order_product_col_2">CIRCLE 02</div>
-        <div class="order_product_col_3">0002</div>
-        <div class="order_product_col_4">35,00 &euro;</div>
-        <div class="clear"></div>
+        $artId = $article['name'];
+        
+        $resName = $sql->getArray("SELECT * FROM rex_webkiosk_products WHERE id=$artId");
+        
+        
+        if($i <= 0)
+          echo '<div style="border-top: 1px dashed #666">';
+        else 
+          echo '<div>';
+          
+        echo '<div class="order_product_col_1">'.$article['amt'].' x Gr.: '.$article['size'].'</div>
+              <div class="order_product_col_2">'.$resName[0]['name'].'</div>
+              <div class="order_product_col_3">'.$article['articlenr'].'</div>
+              <div class="order_product_col_4">'.$article['price'].' &euro;</div>
+              <div class="clear"></div>';
+        echo '</div>';
+        $i--;
+      }
+
+      $gross_sum  = floatval(str_replace(',','.',$result['gross_sum']));
+      $net_sum    = floatval(str_replace(',','.',$result['net_sum']));
+      $mwst       = floatval(str_replace(',','.',$result['net_sum']))-floatval(str_replace(',','.',$result['gross_sum']));
+
+      $coData = $sql->getArray("SELECT shipping_cost FROM ".$REX['TABLE_PREFIX']."webkiosk_settings");
+      $coData = $coData[0];
+      $shipCost = floatval(str_replace(',','.',$coData['shipping_cost']));
+      $shipCost = number_format((float)$shipCost, 2, '.', ',');
+
+      $total = $net_sum + $mwst + $shipCost;
+      ?>
       </div>
       <div class="order_costs">
-        <div class="without_mwst_right">31,59 &euro;</div>
+        <div class="without_mwst_right"><?=$net_sum?> &euro;</div>
         <div class="without_mwst_left"> </div>
         <div class="clear"></div>
-        <div class="mwst_right">7,41 &euro;</div>
+        <div class="mwst_right"><?=$mwst?> &euro;</div>
         <div class="mwst_left">MwSt. 19%</div>
         <div class="clear"></div>
-        <div class="shipping_right">3,90 &euro;</div>
+        <div class="shipping_right"><?=$shipCost?> &euro;</div>
         <div class="shipping_left">Versand</div>
         <div class="clear"></div>
-        <div class="total_right">42,90 &euro;</div>
+        <div class="total_right"><?=$total?> &euro;</div>
         <div class="total_left">Summe</div>
         <div class="clear"></div>
       </div>

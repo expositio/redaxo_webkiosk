@@ -1,6 +1,6 @@
 <?php
   $sql = rex_sql::factory();
-  $sql->debugsql = true;
+  
   $page = rex_request('page', 'string');
   $subpage = rex_request('subpage', 'string');
   $module_in = null;

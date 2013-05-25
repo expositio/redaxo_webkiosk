@@ -36,6 +36,6 @@
   
   require_once($REX['INCLUDE_PATH']. '/addons/'.$ex_addon.'/classes/class.rex_webkiosk_settings.inc.php');  
   require_once($REX['INCLUDE_PATH']. '/addons/'.$ex_addon.'/classes/class.rex_webkiosk_manager.inc.php');
-  require_once($REX['INCLUDE_PATH']. '/addons/'.$ex_addon.'/classes/class.rex_webkiosk_db_helper.inc.php');
+  require_once($REX['INCLUDE_PATH']. '/addons/'.$ex_addon.'/classes/class.rex_webkiosk_helper.inc.php');
 
 ?>

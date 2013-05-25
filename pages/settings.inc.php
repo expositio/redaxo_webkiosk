@@ -9,10 +9,10 @@
   $field->setLabel('E-Mail Betreff Bestellung');
 
   $field = &$form->addTextField('email_addr_1');
-  $field->setLabel('E-Mail Adresse Bestellung');
+  $field->setLabel('Sender E-Mail Adresse Bestellung');
 
   $field = &$form->addTextField('email_addr_2');
-  $field->setLabel('E-Mail Adresse Bestellung (Kopie)');
+  $field->setLabel('E-Mail Adresse Bestellung für Kopie');
 
   $form->addFieldset('Shop');
 

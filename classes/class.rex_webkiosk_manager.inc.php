@@ -156,15 +156,15 @@
         echo "<div class='webkiosk_cart_visible_widget'>";
           echo "<div id='warenkorbtext'>";
             if($_SESSION['webkiosk']['cart']['amt'] == 1) {
-              echo "In Ihrem Warenkorb ist <b>".$_SESSION['webkiosk']['cart']['amt']."</b> Produkt</br>";
+              echo "In Ihrem Warenkorb ist <b>".$_SESSION['webkiosk']['cart']['amt']."</b> ".rex_webkiosk_helper::get_translation('product')."</br>";
             } else {
-              echo "In Ihrem Warenkorb sind <b>".$_SESSION['webkiosk']['cart']['amt']."</b> Produkte</br>";
+              echo "In Ihrem Warenkorb sind <b>".$_SESSION['webkiosk']['cart']['amt']."</b> ".rex_webkiosk_helper::get_translation('product_plural')."</br>";
             }
-            echo "Gesamtsumme <b>".number_format($_SESSION['webkiosk']['cart']['sum'], 2, ',', '.')."</b> &euro;";
+            echo rex_webkiosk_helper::get_translation('sum_total')." <b>".number_format($_SESSION['webkiosk']['cart']['sum'], 2, ',', '.')."</b> ".rex_webkiosk_helper::get_translation('currency');
           echo "</div>";
         echo "</div>";
         echo "<div id='kassenblock'>";
-          echo "<a class='rg_big' href='".rex_getUrl(rex_webkiosk_settings::getCheckoutSite())."'><span class='rg_blau'>&raquo;</span> <b>zur Kasse</b></a><br />";
+          echo "<a class='rg_big' href='".rex_getUrl(rex_webkiosk_settings::getCheckoutSite())."'>".rex_webkiosk_helper::get_translation('to_checkout')."</a><br />";
           echo "<a class='rg_blau toggle_cart' href='javascript:toggleCart();'>Details Warenkorb anzeigen</a>";
         echo "</div>";
         echo "<div class='clear'></div>";
@@ -179,10 +179,10 @@
 
       echo "<div class='webkiosk_cart_widget_toggle'><form action='".rex_getUrl($REX['ARTICLE_ID'], false, array('article' => rex_get('article')))."' method='post'>";
 
-        echo "<div id='cart_detailed_header'><span>Ihr Warenkorb</span></div>";
+        echo "<div id='cart_detailed_header'><span>".rex_webkiosk_helper::get_translation('your_shopping_cart')."</span></div>";
         echo "<div id='cart_detailed_body'>";
         if($_SESSION['webkiosk']['cart']['amt'] == 0) {
-          echo 'Ihr Warenkorb ist leer.<br/>'; 
+          echo rex_webkiosk_helper::get_translation('shopping_cart_empty').'<br/>'; 
         } else {
           $counter = 0;
           foreach($_SESSION['webkiosk']['cart']['items'] as $item) {
@@ -194,10 +194,10 @@
             for($k = 0; $k <= 5; $k++) {
               if(isset($sizeArr[$k]) && $item[$sizeArr[$k]] != '') {
                 echo "<div class='webkiosk_cart_widget_toggle_item'><table><tr><td width='330' class='lin_hotline2'>";
-                  echo $sql->getValue('name')." ( ".$sizeArr[$k]." ) </td><td width=55> ".number_format($item['price'], 2, ',', '.')." &euro;</td>";
-                  // echo "Anzahl &auml;ndern";
+                  echo $sql->getValue('name')." ( ".$sizeArr[$k]." ) </td><td width=55> ".number_format($item['price'], 2, ',', '.')." ".rex_webkiosk_helper::get_translation('currency')."</td>";
+                  echo "Anzahl &auml;ndern";
                   echo "<td><input type='text' width='30' class='change_amount' name='amount[".$counter."]' value='".$item[$sizeArr[$k]]['amt']."'></td>";
-                  echo "<td width='16'><img onclick=\"javascript: deleteItem(".$item['id'].",'".$sizeArr[$k]."');\" style='cursor: pointer;' src='".$REX['HTDOCS_PATH']."files/button_delete.png' width='15px' height='16px' /></td>";
+                  echo "<td width='16'><img onclick=\"javascript: deleteItem(".$item['id'].",'".$sizeArr[$k]."');\" style='cursor: pointer;' src='".$REX['INCLUDE_PATH']."/addons/webkiosk/files/button_delete.png' width='15px' height='16px' /></td>";
                   echo "<input type='hidden' name='a_id[".$counter."]' value='".$item['id']."'>";
                   echo "<input type='hidden' name='size[".$counter."]' value='".$sizeArr[$k]."'></tr></table>";
                 echo "</div>";
@@ -213,8 +213,8 @@
 
           echo "<div id='cart_sum'>";
             echo "<div id='cart_sum_left'>";
-              echo "<span>alle Artikel</span><br />";
-              echo "<span>zzgl. Versandkosten</span>";
+              echo "<span>".rex_webkiosk_helper::get_translation('all_article')."</span><br />";
+              echo "<span>".rex_webkiosk_helper::get_translation('plus_shipping_cost')."</span>";
             echo "</div>";
             echo "<div id='cart_sum_right'>";
               echo "<span><b>".number_format($_SESSION['webkiosk']['cart']['sum'], 2, ',', '.')." &euro;</b></span><br/>";
@@ -226,7 +226,7 @@
           echo "<div class='webkiosk_cart_widget_toggle_right'>";
             echo "<br/>";
             if(intval($_SESSION['webkiosk']['cart']['amt']) == 0) {
-              echo "<br/><br/>";
+              echo "";
             } else {
               echo "<div class='cart_refresh'><input type='submit' name='update' class='button_refresh' value='&raquo; Aktualisieren'></div>";
             }
@@ -246,7 +246,7 @@
       
       if($a_id == null) 
       {
-        return "<div class='webkiosk_error'>Kein Artikel gefunden.</div>";
+        return "<div class='webkiosk_error'>".rex_webkiosk_helper::get_translation('no_article_found')."</div>";
       } 
       else 
       {
@@ -275,7 +275,7 @@
       }
       
       if($_SESSION['webkiosk']['cart']['amt'] <= 0) {
-        echo "<div class='webkiosk_empty_shoppingcart'>Ihr Warenkorb ist leer.</div>";
+        echo "<div class='webkiosk_empty_shoppingcart'>".rex_webkiosk_helper::get_translation('shopping_cart_empty')."</div>";
       } else {
         switch($step) {
           case 1:
@@ -499,7 +499,7 @@
             $sql->setValue('opt_field_var_'.$j, $newAmt);
             
             if($item[$size]['amt'] != '') {
-              echo "<div style='float_left; width:450px; clear:both; margin-left:20px; padding-bottom:5px; margin-bottom:5px;'><div class='webkiosk_checkout_name'><img class='webkiosk_thumb_list_view' src='files/".$result[0]['product_image']."''></div>";
+              echo "<div style='float_left; width:450px; clear:both; margin-left:20px; padding-bottom:5px; margin-bottom:5px;'><div class='webkiosk_checkout_name'><img class='webkiosk_thumb_list_view' src='index.php?rex_img_type=rex_webkiosk&rex_img_file=".$result[0]['product_image']."''></div>";
               echo "<div class='webkiosk_checkout_name'><b>".$result[0]['name']."</b> ( ".$size." )</div>";
               echo "<br/><div class='webkiosk_checkout_amount'>".$item[$size]['amt']."</div>";
               echo "<div class='webkiosk_checkout_price'> x ".number_format(floatval(str_replace(',','.',$result[0]['price'])), 2, ',', '.')." &euro;</div></div><br/>";
@@ -513,25 +513,25 @@
        
        echo "<div class='overviewkorb'><div class='webkiosk_checkout_all_items'>Alle Artikel</div>";
        echo "<div class='webkiosk_checkout_all_items_amount'>".intval($_SESSION['webkiosk']['cart']['amt'])."</div><br/>";
-       echo "<div class='webkiosk_checkout_all_items'>Nettopreis</div>";
+       echo "<div class='webkiosk_checkout_all_items'>".rex_webkiosk_helper::get_translation('net_cost')."</div>";
        echo "<div class='webkiosk_checkout_all_items_price'>".number_format($netSum, 2, ',', '.')." &euro;</div>";
        echo "<div class='clear'></div>";
        echo "<div class='webkiosk_checkout_all_items_mwst'>".$this->TAX_STRING." MwSt.</div>";
        echo "<div class='webkiosk_checkout_all_items_mwst_price'>".number_format((float)$grossSum-(float)$netSum, 2, ',', '.')." &euro;</div>";
        echo "<div class='clear'></div>";
-       echo "<div class='webkiosk_checkout_all_items_mwst'>Versandkosten</div>";
+       echo "<div class='webkiosk_checkout_all_items_mwst'>".rex_webkiosk_helper::get_translation('shipping_cost')."</div>";
        echo "<div class='webkiosk_checkout_all_items_mwst_price'>".$result_checkout['shipping_cost']." &euro;</div>";
        echo "<div class='clear'></div>";
-       echo "<div class='webkiosk_checkout_all_items_sum'><b>Gesamtpreis</b></div>";
+       echo "<div class='webkiosk_checkout_all_items_sum'><b>".rex_webkiosk_helper::get_translation('total_sum')."</b></div>";
        echo "<div class='webkiosk_checkout_all_items_sum_price'> ".number_format(floatval(str_replace(',','.',$_SESSION['webkiosk']['cart']['sum']))+floatval(str_replace(',','.',$result_checkout['shipping_cost'])), 2, ',', '.')." &euro;</div><br/><br/>";
        echo "<div class='clear'></div>";
 
        echo '<form action="'.rex_getUrl($REX['ARTICLE_ID']).'" method="POST">';
         echo '<input type="hidden" name="step" value="5">';
-        echo '<input type="submit" id="submit_button_checkout" name="submit" value="&raquo; Jetzt zum genannten Preis bestellen">';
+        echo '<input type="submit" id="submit_button_checkout" name="submit" value="'.rex_webkiosk_helper::get_translation('order_now_price').'">';
        echo '</form></div>';
        
-       echo "<div class='lin_footer'><br/><br/>Wenn Sie noch Fragen haben, k&ouml;nnen Sie auch anrufen unter 089 - 411 77 367.</div></div>";
+       echo "<div class='webkiosk_checkout_footer'>".rex_webkiosk_helper::get_translation('checkout_footer_info')."<br/><br/></div></div>";
       
     }
     
@@ -558,12 +558,12 @@
       global $REX;
 
       $sql = rex_sql::factory();
-      $db_checkout = $REX['TABLE_PREFIX'].'webkiosk_checkout';
+      $db_checkout = $REX['TABLE_PREFIX'].'webkiosk_settings';
       $db_products = $REX['TABLE_PREFIX'].'webkiosk_products';
 
-      $sql->setQuery("SELECT `paypal_acc`, `shipping_cost` FROM $db_checkout");
+      $sql->setQuery("SELECT `paypal_email`, `shipping_cost` FROM $db_checkout");
       $result_checkout = $sql->getArray();
-      $paypal_account = $result_checkout[0]['paypal_acc'];
+      $paypal_account = $result_checkout[0]['paypal_email'];
       $shipping_cost = $result_checkout[0]['shipping_cost'];
 
       $this->writeOrderToDatabase();
@@ -586,7 +586,7 @@
             $result = $sql->getArray();
           
             for($j = 1; $j <= 6; $j++) {
-              $size = $result[0]['size_'.$j];
+              $size = $result[0]['opt_field_'.$j];
               if(isset($item[$size])) {
               
                 $price = str_replace(',','.',$result[0]['price']);
@@ -617,20 +617,20 @@
       $result_checkout = $sql->getArray();
       $result_checkout = $result_checkout[0];
 
-      $lieferadresse = "Ihre Lieferadresse:\n";
-      $lieferadresse.= $_SESSION['webkiosk']['checkout']['name']." ".$_SESSION['webkiosk']['checkout']['prename']."\n";
-      $lieferadresse.= $_SESSION['webkiosk']['checkout']['zip']." ".$_SESSION['webkiosk']['checkout']['city']."\n";
-      $lieferadresse.= $_SESSION['webkiosk']['checkout']['street']."\n";
+      $lieferadresse = "Ihre Lieferadresse:<br />";
+      $lieferadresse.= $_SESSION['webkiosk']['checkout']['name']." ".$_SESSION['webkiosk']['checkout']['prename']."<br />";
+      $lieferadresse.= $_SESSION['webkiosk']['checkout']['zip']." ".$_SESSION['webkiosk']['checkout']['city']."<br />";
+      $lieferadresse.= $_SESSION['webkiosk']['checkout']['street']."<br />";
 
-      $rechnungsadresse = "Ihre Rechnungsadresse:\n";
+      $rechnungsadresse = "Ihre Rechnungsadresse:<br />";
       if(isset($_SESSION['webkiosk']['checkout']['alt_name']) && $_SESSION['webkiosk']['checkout']['alt_name'] != '') {
-        $rechnungsadresse.= $_SESSION['webkiosk']['checkout']['alt_name']." ".$_SESSION['webkiosk']['checkout']['alt_prename']."\n";
-        $rechnungsadresse.= $_SESSION['webkiosk']['checkout']['alt_zip']." ".$_SESSION['webkiosk']['checkout']['alt_city']."\n";
-        $rechnungsadresse.= $_SESSION['webkiosk']['checkout']['alt_street']."\n";
+        $rechnungsadresse.= $_SESSION['webkiosk']['checkout']['alt_name']." ".$_SESSION['webkiosk']['checkout']['alt_prename']."<br />";
+        $rechnungsadresse.= $_SESSION['webkiosk']['checkout']['alt_zip']." ".$_SESSION['webkiosk']['checkout']['alt_city']."<br />";
+        $rechnungsadresse.= $_SESSION['webkiosk']['checkout']['alt_street']."<br />";
       } else {
-        $rechnungsadresse.= $_SESSION['webkiosk']['checkout']['name']." ".$_SESSION['webkiosk']['checkout']['prename']."\n";
-        $rechnungsadresse.= $_SESSION['webkiosk']['checkout']['zip']." ".$_SESSION['webkiosk']['checkout']['city']."\n";
-        $rechnungsadresse.= $_SESSION['webkiosk']['checkout']['street']."\n";
+        $rechnungsadresse.= $_SESSION['webkiosk']['checkout']['name']." ".$_SESSION['webkiosk']['checkout']['prename']."<br />";
+        $rechnungsadresse.= $_SESSION['webkiosk']['checkout']['zip']." ".$_SESSION['webkiosk']['checkout']['city']."<br />";
+        $rechnungsadresse.= $_SESSION['webkiosk']['checkout']['street']."<br />";
       }
 
       $header = $result_checkout['conf_header_mail'];
@@ -639,7 +639,7 @@
       $header = str_replace("###lieferadresse###", $lieferadresse, $header);
       $header = str_replace("###rechnungsadresse###", $rechnungsadresse, $header);
 
-      $body = $header."\n\n";
+      $body = $header."<br /><br />";
 
       foreach($_SESSION['webkiosk']['cart']['items'] as $item):
         $sql->setQuery("SELECT * FROM $db_products WHERE `id`=".$item['id']);
@@ -658,24 +658,24 @@
             if($item[$size]['amt'] != '') {
               $body .= $item[$size]['amt']." x ";
               $body .= $result[0]['name']." ( ".$size." ) je ";
-              $body .= number_format(floatval(str_replace(',','.',$result[0]['price'])), 2, ',', '.')." Euro\n";
+              $body .= number_format(floatval(str_replace(',','.',$result[0]['price'])), 2, ',', '.')." Euro<br />";
             }
           } //if end
         } //for end
        endforeach;
 
-        $body .= "__________________________\n";
+        $body .= "__________________________<br />";
         $body .= $_SESSION['webkiosk']['cart']['amt']." Artikel: ";
         $grossSum = floatval(str_replace(',','.',$_SESSION['webkiosk']['cart']['sum']));
         $netSum = (float)$grossSum / ($this->TAX);
-        $body .= number_format($netSum, 2, ',', '.')." Euro\n";
-        $body .= $this->TAX_STRING." MwSt.: ".number_format((float)$grossSum-(float)$netSum, 2, ',', '.')." Euro\n";
+        $body .= number_format($netSum, 2, ',', '.')." Euro<br />";
+        $body .= $this->TAX_STRING." MwSt.: ".number_format((float)$grossSum-(float)$netSum, 2, ',', '.')." Euro<br />";
         $body .= "Versandkosten: ";
-        $body .= $result_checkout['shipping_cost']." Euro\n";
+        $body .= $result_checkout['shipping_cost']." Euro<br />";
         $body .= "Gesamt: ";
-        $body .= number_format(floatval(str_replace(',','.',$_SESSION['webkiosk']['cart']['sum']))+floatval(str_replace(',','.',$result_checkout['shipping_cost'])), 2, ',', '.')." Euro\n";
+        $body .= number_format(floatval(str_replace(',','.',$_SESSION['webkiosk']['cart']['sum']))+floatval(str_replace(',','.',$result_checkout['shipping_cost'])), 2, ',', '.')." Euro<br />";
 
-        $body .= "\n";
+        $body .= "<br />";
         
         $footer = $result_checkout['conf_footer_mail'];
         $footer = str_replace("###name###", $_SESSION['webkiosk']['checkout']['name'], $footer);
@@ -685,26 +685,22 @@
 
         $body .= $footer;
 
-        // $header_mail = 'From: '.$result_checkout['email_addr_1'];
         $to = $_SESSION['webkiosk']['checkout']['email'];
         $subject = $result_checkout['email_subject'];
         $copyto = $result_checkout['email_addr_2'];
 
         $mail = "<html><head><title>".$subject."</title></head><body>".$header.$body.$footer."</body></html>";
 
-        // für HTML-E-Mails muss der 'Content-type'-Header gesetzt werden
         $header_mail  = 'MIME-Version: 1.0'."\r\n";
         $header_mail .= 'Content-type: text/html; charset=utf-8'."\r\n";
 
-        // zusätzliche Header
         $header_mail .= 'To: '.$to."\r\n";
         $header_mail .= 'From:'.$result_checkout['email_addr_1']."\r\n";
 
         $sent = mail($to, $subject, $mail, $header_mail).mail($copyto, $subject, $mail, $header_mail);
-        //$sent = ;  //send copy to merchant
 
         if(!$sent){
-          echo "<div class='webkiosk_checkout_error'>Es ist ein Fehler aufgetreten. Ihre E-Mail konnte nicht gesendet werden.</div>";
+          echo "<div class='webkiosk_checkout_error'>".rex_webkiosk_helper::get_translation('mail_sent_error')."</div>";
           die();
         } else {
           $this->checkoutStepFiveThankYou();
@@ -903,7 +899,7 @@
       global $REX;
 
       $sql = rex_sql::factory();
-      $sql->setTable($REX['TABLE_PREFIX']."webkiosk_checkout");
+      $sql->setTable($REX['TABLE_PREFIX']."webkiosk_settings");
       $sql->select('shipping_cost');
       $sql->getRows();
       return str_replace(',','.',$sql->getValue('shipping_cost'));
@@ -919,6 +915,18 @@
       $sql->select('name');
       $sql->getRows();
       return $sql->getValue('name'); 
+    }
+
+    function getDetailPage() {
+      global $REX;
+
+      $sql = rex_sql::factory();
+      
+      $sql->setTable($REX['TABLE_PREFIX']."webkiosk_settings");
+      $sql->setWhere('id = 1');
+      $sql->select('article_detail_page');
+      $sql->getRows();
+      return $sql->getValue('article_detail_page');
     }
   }
 ?>

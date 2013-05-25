@@ -1,0 +1,16 @@
+all_article = Alle Artikel
+plus_shipping_cost = zzgl. Versandkosten
+product = Produkt
+product_plural = Produkte
+to_checkout = <span class='rg_blau'>&raquo;</span> <b>zur Kasse</b>
+currency = &euro;
+sum_total = Gesamtsumme
+shopping_cart_empty = Ihr Warenkorb ist leer.
+your_shopping_cart = Ihr Warenkorb
+no_article_found = Kein Artikel gefunden.
+mail_sent_error = Es ist ein Fehler aufgetreten. Ihre E-Mail konnte nicht gesendet werden.
+net_cost = Nettopreis
+shipping_cost = Versandkosten
+total_sum = Gesamtsumme
+order_now_price = &raquo; Jetzt zum genannten Preis bestellen
+checkout_footer_info = Wenn Sie noch Fragen haben, k&ouml;nnen Sie auch anrufen unter 12345678
